@@ -109,5 +109,14 @@ export const getMovieById = async (req, res, next) => {
 
   return res.status(200).json({ movie });
 };
+//Get movies sorted by latest release date
+export const getMovies = async (req, res) => {
+  try {
+    const movies = await Movie.find().sort({ releaseDate: -1 }); // Newest first
+    res.status(200).json(movies);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 
 

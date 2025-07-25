@@ -19,12 +19,7 @@ const userSchema = new Schema({
     minLength: 6,
   },
   bookings: [{ type: mongoose.Types.ObjectId, ref: "Booking" }],
-  otp: {  // OTP field
-    type: String,
-  },
-  otpExpiration: {  // OTP expiration field
-    type: Date,
-  },
+  
 });
 
 export default mongoose.model("User", userSchema);

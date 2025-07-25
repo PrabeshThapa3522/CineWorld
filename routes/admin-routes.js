@@ -1,4 +1,6 @@
 
+
+
 import express from "express";
 import {
   addAdmin,
@@ -11,12 +13,25 @@ import {
 
 const adminRouter = express.Router();
 
+// Route for adding admin (signup)
 adminRouter.post("/signup", addAdmin);
+
+// Route for admin login (sends OTP)
 adminRouter.post("/login", adminLogin);
-adminRouter.get("/", getAdmins);
-adminRouter.get("/:id", getAdminById);
-adminRouter.post("/verify-otp", verifyAdminOtp); // Keep only the necessary routes
+
+// Route for verifying OTP
+adminRouter.post("/verify-otp", verifyAdminOtp);
+
+// Route for sending OTP manually
 adminRouter.post("/send-otp", sendOtpForAdmin);
 
+// Route for getting all admins (you can restrict this if needed)
+adminRouter.get("/", getAdmins);
+
+// Route for getting a specific admin by ID
+adminRouter.get("/:id", getAdminById);
+
 export default adminRouter;
+
+
 

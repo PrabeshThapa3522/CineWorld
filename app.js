@@ -29,6 +29,7 @@ app.use("/admin", adminRouter);
 app.use("/movie", movieRouter);
 app.use("/booking", bookingsRouter);
 app.use('/api/admin', adminRouter);
+app.use('api/moive', movieRouter);
 
 // Test email route
 app.get("/test-email", async (req, res) => {
@@ -98,7 +99,7 @@ app.get("/payment/callback", (req, res) => {
 // Connect to MongoDB and start server
 mongoose
   .connect(
-    `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@clusterpra.qt7av.mongodb.net/?retryWrites=true&w=majority&appName=ClusterPRA`
+    `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@clusterpra.qt7av.mongodb.net/test?retryWrites=true&w=majority&appName=ClusterPRA`
   )
   .then(() => {
     app.listen(9001, () => {

@@ -75,38 +75,6 @@ export const signup = async (req, res, next) => {
   });
 };
 
-// OTP Verification (Added Function)
-export const verifyOtp = async (req, res, next) => {
-  const { email, otp } = req.body;
-
-  if (!email || !otp) {
-    return res.status(422).json({ message: "Email and OTP are required" });
-  }
-
-  let user;
-  try {
-    user = await User.findOne({ email });
-  } catch (err) {
-    return res.status(500).json({ message: "Error retrieving user" });
-  }
-
-  if (!user) {
-    return res.status(404).json({ message: "User not found" });
-  }
-
-  // Verify OTP using the stored 2FA secret
-  const verified = speakeasy.totp.verify({
-    secret: user.twoFASecret,  // Retrieve the stored 2FA secret
-    encoding: "base32",
-    token: otp,  // OTP entered by the user
-  });
-
-  if (!verified) {
-    return res.status(400).json({ message: "Invalid OTP" });
-  }
-
-  return res.status(200).json({ message: "OTP Verified Successfully" });
-};
 
 // Login with 2FA verification
 export const login = async (req, res, next) => {
@@ -133,16 +101,7 @@ export const login = async (req, res, next) => {
     return res.status(400).json({ message: "Incorrect Password" });
   }
 
-  // // Verify OTP (2FA)
-  // const verified = speakeasy.totp.verify({
-  //   secret: existingUser.twoFASecret, // Use the stored secret for OTP verification
-  //   encoding: "base32",
-  //   token: otp, // OTP entered by the user
-  // });
 
-  // if (!verified) {
-  //   return res.status(400).json({ message: "Invalid OTP" });
-  // }
 
   return res.status(200).json({
     message: "Login Successful",
