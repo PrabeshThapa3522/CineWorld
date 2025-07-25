@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+/*import React, { useEffect, useState } from "react";
 import { getAllMovies } from "../../api-helpers/api-helpers";
 import MovieItem from "./MovieItem";
 import "./Movies.css"; // Add your custom styles here
@@ -31,5 +31,48 @@ const Movies = () => {
 };
 
 export default Movies;
+*/
+import React, { useEffect, useState } from "react";
+import { getAllMovies } from "../../api-helpers/api-helpers"; // Ensure this function fetches movies
+import MovieItem from "./MovieItem";
+import "./Movies.css"; // Add your custom styles here
+
+const Movies = () => {
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    getAllMovies()
+      .then((data) => {
+        // Sorting the movies by releaseDate in descending order (newest first)
+        const sortedMovies = data.movies.sort(
+          (a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)
+        );
+        setMovies(sortedMovies);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  return (
+    <div className="movies-container">
+      <h4 className="movies-header">All Movies</h4>
+      <div className="movies-list">
+        {movies &&
+          movies.map((movie, index) => (
+            <MovieItem
+              key={index}
+              id={movie._id}
+              posterUrl={movie.posterUrl}
+              releaseDate={movie.releaseDate}
+              title={movie.title}
+            />
+          ))}
+      </div>
+    </div>
+  );
+};
+
+export default Movies;
+
+
 
 

@@ -1,4 +1,4 @@
-
+/*
 import React, { useEffect, useState } from "react";
 import { getAllMovies } from "../api-helpers/api-helpers";
 import MovieItem from "./Movies/MovieItem";
@@ -31,7 +31,7 @@ const HomePage = () => {
       <div className="home_page_movies_container">
         {movies &&
           movies
-            .slice(0, 4)
+            .slice(0, 3)
             .map((movie, index) => (
               <MovieItem
                 id={movie._id}  // Use '_id' here
@@ -53,5 +53,68 @@ const HomePage = () => {
 };
 
 export default HomePage;
+*/
+
+import React, { useEffect, useState } from "react";
+import { getAllMovies } from "../api-helpers/api-helpers";
+import MovieItem from "./Movies/MovieItem";
+import { Link } from "react-router-dom";
+import "./HomePage.css";  // Import custom CSS for styling
+
+const HomePage = () => {
+  const [movies, setMovies] = useState([]);
+  
+  useEffect(() => {
+    getAllMovies()
+      .then((data) => {
+        // Sort movies by release date (newest first)
+        const sortedMovies = data.movies.sort(
+          (a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)
+        );
+        setMovies(sortedMovies);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+  return (
+    <div className="home_page_container">
+      <div className="home_page_banner_container">
+        <img
+          src="https://www.glenbrookcinema.com.au/imagesDB/movies/MufasaTheLionKingSlidePG.jpg"
+          alt="Mufasa"
+          className="banner-image"
+        />
+      </div>
+
+      <div className="latest-releases">
+        <h2>Latest Releases</h2>
+      </div>
+
+      <div className="home_page_movies_container">
+        {movies &&
+          movies
+            .slice(0, 3)  // Display top 3 latest movies
+            .map((movie, index) => (
+              <MovieItem
+                id={movie._id}  // Use '_id' here
+                title={movie.title}
+                posterUrl={movie.posterUrl}
+                releaseDate={movie.releaseDate}
+                key={index}
+              />
+            ))}
+      </div>
+
+      <div className="view-all-button-container">
+        <Link to="/movies" className="view-all-button">
+          View All Movies
+        </Link>
+      </div>
+    </div>
+  );
+};
+
+export default HomePage;
+
 
 

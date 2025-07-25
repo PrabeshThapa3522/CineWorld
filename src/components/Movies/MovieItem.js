@@ -24,3 +24,5 @@ const MovieItem = ({ title, releaseDate, posterUrl, id }) => {
 
 export default MovieItem;
 
+
+

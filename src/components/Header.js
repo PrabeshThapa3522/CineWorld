@@ -156,16 +156,6 @@ const Header = () => {
               <Link className="tab" to="/auth">
                 Auth
               </Link>
-              <div className="dropdown">
-                <button className="tab dropdown-btn">Events</button>
-                <div className="dropdown-content">
-                  <Link to="/events/football">Football</Link>
-                  <Link to="/events/cricket">Cricket</Link>
-                  <Link to="/events/comedy">Comedy</Link>
-                  <Link to="/events/singing">Singing</Link>
-                  <Link to="/events/dancing">Dancing</Link>
-                </div>
-              </div>
             </>
           )}
           {isUserLoggedIn && (
@@ -176,6 +166,16 @@ const Header = () => {
               <button className="tab" onClick={() => logout(false)}>
                 Logout
               </button>
+              <div className="dropdown">
+                <button className="tab dropdown-btn">Events</button>
+                <div className="dropdown-content">
+                  <Link to="/events/football">Football</Link>
+                  <Link to="/events/cricket">Cricket</Link>
+                  <Link to="/events/comedy">Comedy</Link>
+                  <Link to="/events/singing">Singing</Link>
+                  <Link to="/events/dancing">Dancing</Link>
+                </div>
+              </div>
             </>
           )}
           {isAdminLoggedIn && (

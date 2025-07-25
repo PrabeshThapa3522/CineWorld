@@ -1,9 +1,6 @@
-
-// Without mui
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { adminLogin } from "../../helpers/api-helpers";
+import { sendAdminAuthRequest } from "../../api-helpers/api-helpers"; // Import the API call
 import { useDispatch } from "react-redux";
 import { adminActions } from "../../store/admin-slice";
 import "./AdminAuth.css";
@@ -16,7 +13,7 @@ const AdminAuth = () => {
 
   const onClose = () => {
     setOpen(false);
-    navigate("/");
+    navigate("/"); // Redirect to home when modal is closed
   };
 
   const handleChange = (e) => {
@@ -26,20 +23,21 @@ const AdminAuth = () => {
     }));
   };
 
-  const onRequestSent = (val) => {
-    localStorage.removeItem("userId");
-    localStorage.setItem("adminId", val.id);
-    localStorage.setItem("token", val.token);
-    dispatch(adminActions.login());
-    setOpen(false);
-    navigate("/");
+  const onRequestSent = (data) => {
+    if (data && data.token) {
+      localStorage.setItem("adminId", data.id);
+      localStorage.setItem("token", data.token);
+      dispatch(adminActions.login());
+      setOpen(false);
+      navigate("/admin/dashboard"); // Redirect to the admin dashboard after successful login
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    adminLogin(inputs)
+    sendAdminAuthRequest(inputs)
       .then(onRequestSent)
-      .catch((err) => console.log(err));
+      .catch((err) => console.log("Login error:", err));
     setInputs({ email: "", password: "" });
   };
 
@@ -91,5 +89,3 @@ const AdminAuth = () => {
 };
 
 export default AdminAuth;
-
-

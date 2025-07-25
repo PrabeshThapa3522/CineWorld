@@ -1,5 +1,5 @@
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import Admin from "./components/Auth/Admin";
@@ -16,6 +16,7 @@ import Footer from "./components/Footer/Footer"; // Footer is imported here
 import { adminActions, userActions } from "./store";
 import FootballPage from "./components/FootballPage";
 import CricketPage from "./components/CricketPage";
+import { getAllMovies } from "./api-helpers/api-helpers"; 
 
 function App() {
   const dispatch = useDispatch();
@@ -29,6 +30,20 @@ function App() {
       dispatch(adminActions.login());
     }
   }, [dispatch]);
+  const [ setMovies] = useState([]);
+
+  useEffect(() => {
+    getAllMovies()
+      .then((data) => {
+        // Sort movies by release date (newest first)
+        const sortedMovies = data.movies.sort(
+          (a, b) => new Date(b.releaseDate) - new Date(a.releaseDate)
+        );
+        setMovies(sortedMovies);
+      })
+      .catch((err) => console.log(err));
+  }, [setMovies]);
+
 
   return (
     <div>
@@ -47,6 +62,7 @@ function App() {
             <>
               <Route path="/user" element={<UserProfile />} />
               <Route path="/booking/:id" element={<Booking />} />
+              
             </>
           )}
           {isAdminLoggedIn && (
@@ -57,6 +73,9 @@ function App() {
           )}
           
           <Route path="*" element={<div>Page Not Found</div>} />
+          <Route path="/events/football" element={<FootballPage />} /> 
+               <Route path="/events/cricket" element={<CricketPage />} />
+                  
           
         </Routes>
         
