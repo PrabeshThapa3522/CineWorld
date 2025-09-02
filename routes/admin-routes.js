@@ -5,8 +5,7 @@ import {
   adminLogin,
   getAdminById,
   getAdmins,
-  sendOtpForAdmin,
-  verifyAdminOtp, // Only keep necessary functions here
+  // Only keep necessary functions here
 } from "../controllers/admin-controller.js";
 
 const adminRouter = express.Router();
@@ -17,11 +16,9 @@ adminRouter.post("/signup", addAdmin);
 // Route for admin login (sends OTP)
 adminRouter.post("/login", adminLogin);
 
-// Route for verifying OTP
-adminRouter.post("/verify-otp", verifyAdminOtp);
 
-// Route for sending OTP manually
-adminRouter.post("/send-otp", sendOtpForAdmin);
+
+
 
 // Route for getting all admins (you can restrict this if needed)
 adminRouter.get("/", getAdmins);

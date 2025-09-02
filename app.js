@@ -29,7 +29,7 @@ app.use("/admin", adminRouter);
 app.use("/movie", movieRouter);
 app.use("/booking", bookingsRouter);
 app.use('/api/admin', adminRouter);
-app.use('api/moive', movieRouter);
+app.use('/api/movie', movieRouter);
 
 // Test email route
 app.get("/test-email", async (req, res) => {
