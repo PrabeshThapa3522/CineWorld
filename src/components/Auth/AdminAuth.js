@@ -29,7 +29,7 @@ const AdminAuth = () => {
       localStorage.setItem("token", data.token);
       dispatch(adminActions.login());
       setOpen(false);
-      navigate("/admin/dashboard"); // Redirect to the admin dashboard after successful login
+      navigate("/"); // Redirect to the admin dashboard after successful login
     }
   };
 
@@ -79,9 +79,12 @@ const AdminAuth = () => {
               required
             />
           </div>
+          
           <button type="submit" className="submit-button">
             Login
           </button>
+
+          
         </form>
       </div>
     </div>
@@ -89,3 +92,6 @@ const AdminAuth = () => {
 };
 
 export default AdminAuth;
+
+
+

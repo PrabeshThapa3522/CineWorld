@@ -20,7 +20,7 @@
     padding: 20px;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     text-align: center;
-  }
+  } 
   
   /* Close Button */
   .modal-close {
@@ -33,7 +33,7 @@
     border: none;
     font-size: 20px;
     cursor: pointer;
-  }
+  } 
   
   /* Modal Title */
   .modal-title {
@@ -41,7 +41,7 @@
     font-size: 24px;
     font-weight: bold;
   }
-  
+   
   /* Form Group */
   .form-group {
     margin-bottom: 15px;
@@ -60,10 +60,10 @@
     border-radius: 5px;
     border: 1px solid #ccc;
     font-size: 14px;
-  }
+  } 
   
   /* Submit Button */
-  .submit-button {
+   .submit-button {
     width: 100%;
     padding: 10px;
     border-radius: 10px;
@@ -73,4 +73,6 @@
     font-size: 16px;
     cursor: pointer;
   }
-  
+   
+    
+

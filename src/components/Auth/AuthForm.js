@@ -9,7 +9,8 @@ const AuthForm = ({ onSubmit, isAdmin }) => {
     password: "",
     
   });
-  const [isSignup, setIsSignup] = useState(true);
+  const [isSignup, setIsSignup] = useState(false);
+
   const [errors, setErrors] = useState({}); // For validation errors
 
   const validateInputs = () => {
@@ -42,7 +43,7 @@ const AuthForm = ({ onSubmit, isAdmin }) => {
       return;
     }
     setErrors({});
-    onSubmit({ inputs, signup: isAdmin ? false : isSignup });
+   onSubmit({ inputs, addAdmin: isAdmin ? false : isSignup });
   };
 
   return (

@@ -1,5 +1,4 @@
 
-
 import React from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,27 +7,37 @@ import { adminActions } from "../../store";
 import AuthForm from "./AuthForm";
 
 const Admin = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const onResReceived = (data) => {
-    console.log(data);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (data) => {
+    const { success, data: resData } = await sendAdminAuthRequest(data.inputs, !data.addAdmin);
+
+    if (!success) {
+      alert(resData.message || "Request failed");
+      return;
+    }
+
+    if (data.addAdmin) {
+      // Signup
+      alert("Signup successful! Please login.");
+      navigate("/admin/login");
+      return;
+    }
+
+    // Login
+    if (!resData.token) {
+      alert("Login failed. Token not received.");
+      return;
+    }
+
+    localStorage.setItem("adminId", resData.id);
+    localStorage.setItem("token", resData.token);
     dispatch(adminActions.login());
-    localStorage.setItem("adminId", data.id);
-    localStorage.setItem("token", data.token);
-    navigate("/");
+    navigate("/admin/dashboard");
   };
-  const getData = (data) => {
-    console.log("Admin", data);
-    sendAdminAuthRequest(data.inputs)
-      .then(onResReceived)
-      .catch((err) => console.log(err));
-  };
-  return (
-    <div>
-      <AuthForm onSubmit={getData} isAdmin={true} />
-    </div>
-  );
+
+  return <AuthForm onSubmit={handleSubmit} isAdmin={false} />;
 };
 
 export default Admin;
-

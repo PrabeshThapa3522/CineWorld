@@ -1,4 +1,5 @@
 import axios from "axios";
+
 export const getAllMovies = async () => {
   const res = await axios.get("/movie").catch((err) => console.log(err));
 
@@ -30,25 +31,57 @@ export const sendUserAuthRequest = async (data, signup) => {
 };
 
 
-// Admin Authentication API call
-export const sendAdminAuthRequest = async (data) => {
+// // Admin Authentication API call
+// export const sendAdminAuthRequest = async (data) => {
+//   try {
+//     const response = await fetch("http://localhost:9001/admin/login", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       body: JSON.stringify(data),
+//     });
+
+//     if (!response.ok) {
+//       throw new Error("Login failed");
+//     }
+
+//     return response.json(); // Assuming response contains `id` and `token`
+//   } catch (err) {
+//     console.error("API error:", err);
+//     throw err;
+//   }
+// };
+
+axios.defaults.baseURL = "http://localhost:9001"; // Make sure backend URL is correct
+
+export const sendAdminAuthRequest = async (inputs, isLogin = true) => {
   try {
-    const response = await fetch("http://localhost:9001/admin/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (!response.ok) {
-      throw new Error("Login failed");
-    }
-
-    return response.json(); // Assuming response contains `id` and `token`
+    const endpoint = isLogin ? "login" : "signup";
+    const res = await axios.post(`/admin/${endpoint}`, inputs);
+    return { success: true, data: res.data };
   } catch (err) {
-    console.error("API error:", err);
-    throw err;
+    return { success: false, data: err.response?.data || { message: "Request failed" } };
+  }
+};
+
+export const getAdminById = async () => {
+  const adminId = localStorage.getItem("adminId");
+  const token = localStorage.getItem("token");
+
+  if (!adminId || !token) {
+    console.error("Admin not logged in");
+    return null;
+  }
+
+  try {
+    const res = await axios.get(`/admin/${adminId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching admin details:", err);
+    return null;
   }
 };
 
@@ -128,59 +161,30 @@ export const getUserDetails = async () => {
   return resData;
 };
 
+
 export const addMovie = async (data) => {
-  const res = await axios
-    .post(
-      "/movie",
+  try {
+    const res = await axios.post(
+      "/api/movie/add", // matches backend
       {
         title: data.title,
         description: data.description,
         releaseDate: data.releaseDate,
         posterUrl: data.posterUrl,
-        fetaured: data.fetaured,
+        featured: data.featured, // fix typo
         actors: data.actors,
-        admin: localStorage.getItem("adminId"),
       },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       }
-    )
-    .catch((err) => console.log(err));
+    );
 
-  if (res.status !== 201) {
-    return console.log("Unexpected Error Occurred");
-  }
-
-  const resData = await res.data;
-  return resData;
-};
-
-export const getAdminById = async () => {
-  const adminId = localStorage.getItem("adminId");
-  const token = localStorage.getItem("token");
-
-  if (!adminId || !token) {
-    console.error("Admin not logged in");
-    return null;
-  }
-
-  try {
-    const res = await axios.get(`/admin/${adminId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (res.status !== 200) {
-      throw new Error("Unexpected Error Occurred");
-    }
-
-    const resData = res.data;
-    return resData;
+    return res.data;
   } catch (err) {
-    console.error("Error fetching admin details:", err);
-    return null;
+    console.error("Error adding movie:", err.response?.data || err);
+    throw err;
   }
 };
+
